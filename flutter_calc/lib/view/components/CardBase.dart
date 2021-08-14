@@ -9,6 +9,7 @@ class CardBase extends StatelessWidget {
   final double horizontalPadding;
   final double verticalPadding;
   final Color backgroundColor;
+  final Function onTapCard;
 
   CardBase(
       {this.child,
@@ -16,7 +17,8 @@ class CardBase extends StatelessWidget {
       this.width,
       this.horizontalPadding,
       this.verticalPadding,
-      this.backgroundColor});
+      this.backgroundColor,
+      this.onTapCard});
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +36,18 @@ class CardBase extends StatelessWidget {
                 : Theme.of(context).cardColor,
             elevation: 5,
             borderRadius: BorderRadius.circular(20),
-            child: Container(
-                height: heigth,
-                width: width,
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: child),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(20),
+              onTap: this.onTapCard ?? () {},
+              child: Container(
+                  height: heigth,
+                  width: width,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: child),
+            ),
           )),
     );
   }

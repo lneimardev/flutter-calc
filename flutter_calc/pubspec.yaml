@@ -32,6 +32,12 @@ dependencies:
   # get
   get: ^4.3.4
 
+  # grouped lists
+  grouped_list: ^4.1.0
+
+  # formats, localizations
+  intl: ^0.17.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

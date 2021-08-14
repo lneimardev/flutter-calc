@@ -1,4 +1,5 @@
 class Historico {
+  DateTime dataCalculo;
   String valor1Header;
   String valor1;
   String operacaoHeader;
@@ -13,6 +14,7 @@ class Historico {
       this.valor2Header = "Valor 2:",
       this.operacaoHeader = "Operação",
       this.resultadoHeader = "Resultado",
+      this.dataCalculo,
       this.valor1,
       this.valor2,
       this.operacao,
