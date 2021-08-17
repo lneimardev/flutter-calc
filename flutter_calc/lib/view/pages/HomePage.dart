@@ -6,8 +6,6 @@ import 'package:flutter_calc/view/components/HistoricoWidget.dart';
 import 'package:flutter_calc/view/components/PageBase.dart';
 import 'package:flutter_calc/view/pages/CalcPage.dart';
 import 'package:flutter_calc/view/pages/HistoryPage.dart';
-import 'package:flutter_calc/view/utils/utils.dart';
-import 'package:grouped_list/grouped_list.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -68,11 +66,12 @@ class _MyHomePageState extends State<MyHomePage>
             (BuildContext context, AsyncSnapshot<List<Historico>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // TODO: Melhorar o visual do progress indicator
-            return Container(
+            return SizedBox(
               height: 20,
               width: 20,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
+                backgroundColor: Colors.deepPurple,
               ),
             );
           }
@@ -80,41 +79,16 @@ class _MyHomePageState extends State<MyHomePage>
           if (snapshot != null &&
               snapshot.data != null &&
               snapshot.data.isNotEmpty) {
-            return GroupedListView<dynamic, DateTime>(
-              elements: snapshot.data,
-              groupBy: (element) => element.dataCalculo,
-              groupComparator: (value1, value2) => value2.compareTo(value1),
-              itemComparator: (item1, item2) =>
-                  item1.dataCalculo.compareTo(item2.dataCalculo),
-              order: GroupedListOrder.DESC,
-              useStickyGroupSeparators: false,
-              groupSeparatorBuilder: (DateTime value) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  formtDateToStr(value, "dd/MM/yyyy"),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              itemBuilder: (c, element) {
-                return HistoricoValores(
-                  headline5: Theme.of(context).textTheme.headline5,
-                  subtitle2: Theme.of(context).textTheme.subtitle2,
-                  record: Historico(
-                      valor1: element.valor1,
-                      valor2: element.valor2,
-                      operacao: element.operacao,
-                      resultado: element.resultado),
-                );
-              },
+            return HistoricoWidget(
+              data: snapshot.data,
+              headline5: Theme.of(context).textTheme.headline5,
+              subtitle2: Theme.of(context).textTheme.subtitle2,
             );
           }
 
-          // TODO: Melhorar o visual do texto de quando não tem dados
-          return Center(
-            child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Text("Sem dados para serem exibidos...")),
+          return Padding(
+            padding: EdgeInsets.all(10),
+            child: Text("Sem dados para serem exibidos...", textAlign: TextAlign.center,),
           );
         });
   }
@@ -136,23 +110,14 @@ class _MyHomePageState extends State<MyHomePage>
                 Text("Conteúdo", style: Theme.of(context).textTheme.headline3),
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             centerTitle: true,
+            elevation: 0,
             leading: IconButton(
               icon: AnimatedIcon(
                 icon: AnimatedIcons.menu_close,
                 color: Colors.deepPurple,
                 progress: _animationController,
               ),
-              onPressed: () {
-                setState(() {
-                  if (isCollapsed) {
-                    _animationController.forward();
-                  } else {
-                    _animationController.reverse();
-                  }
-
-                  isCollapsed = !isCollapsed;
-                });
-              },
+              onPressed: _toggleMenu,
             ),
           ),
           body: PageBase(
@@ -211,8 +176,7 @@ class _MyHomePageState extends State<MyHomePage>
                                   .withOpacity(0.2),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10))),
-                          child: _historicoList()
-                          )
+                          child: _historicoList())
                     ],
                   ),
                 ),
@@ -280,6 +244,8 @@ class _MyHomePageState extends State<MyHomePage>
                 context,
                 MaterialPageRoute(builder: (context) => MyHomePage()),
               );
+
+              _toggleMenu();
             }, MENU_ITEM_HOME),
             _menuItem("Calculadora", Icons.calculate, () {
               setState(() {
@@ -292,6 +258,8 @@ class _MyHomePageState extends State<MyHomePage>
                 context,
                 MaterialPageRoute(builder: (context) => CalcPage()),
               );
+
+              _toggleMenu();
             }, MENU_ITEM_CALC),
             _menuItem("Histórico", Icons.history, () {
               setState(() {
@@ -304,15 +272,32 @@ class _MyHomePageState extends State<MyHomePage>
                 context,
                 MaterialPageRoute(builder: (context) => HistoryPage()),
               );
+
+              _toggleMenu();
             }, MENU_ITEM_HIST),
             SizedBox(
               height: _defaultPadding,
             ),
-            _menuItem("Avaliar App", Icons.star_outline, () {}, MENU_ITEMAVALI),
+            _menuItem("Avaliar App", Icons.star_outline, () {
+              _toggleMenu();
+            }, MENU_ITEMAVALI),
           ],
         ),
       ),
     );
+  }
+
+  _toggleMenu() {
+    setState(() {
+      if (isCollapsed) {
+        _selectedMenu = MENU_ITEM_HOME;
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+
+      isCollapsed = !isCollapsed;
+    });
   }
 }
 

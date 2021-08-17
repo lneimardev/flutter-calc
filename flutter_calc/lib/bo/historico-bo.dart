@@ -6,6 +6,8 @@ Future<List<Historico>> dadosListHistorico() async {
     // TODO: Implementar a chama da api 
     //List<Historico> list = await <chamada da api>
 
+    await Future.delayed(Duration(seconds: 10));
+
     List<Historico> list = [];
     Historico hist;
     DateTime referencia = DateTime.now();

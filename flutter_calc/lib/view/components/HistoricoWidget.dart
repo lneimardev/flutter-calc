@@ -1,21 +1,47 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_calc/model/historico.dart';
+import 'package:flutter_calc/view/utils/utils.dart';
+import 'package:grouped_list/grouped_list.dart';
 
-class HistoricoValores extends StatelessWidget {
-  const HistoricoValores({
+class HistoricoWidget extends StatelessWidget {
+  const HistoricoWidget({
     Key key,
-    this.record,
+    this.data,
     this.subtitle2,
     this.headline5,
   }) : super(key: key);
 
-  final Historico record;
+  final List<Historico> data;
   final TextStyle subtitle2;
   final TextStyle headline5;
 
   @override
   Widget build(BuildContext context) {
+    return GroupedListView<dynamic, DateTime>(
+        elements: this.data,
+        groupBy: (element) => element.dataCalculo,
+        groupComparator: (value1, value2) => value2.compareTo(value1),
+        itemComparator: (item1, item2) =>
+            item1.dataCalculo.compareTo(item2.dataCalculo),
+        order: GroupedListOrder.DESC,
+        useStickyGroupSeparators: false,
+        groupSeparatorBuilder: (DateTime value) => Container(
+              padding: EdgeInsets.all(5),
+              margin: EdgeInsets.only(left: 90, right: 90, top: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(25)),
+                  color: Colors.deepPurple),
+              child: Text(
+                formtDateToStr(value, "dd/MM/yyyy"),
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline2,
+              ),
+            ),
+        itemBuilder: (c, element) => _buildHistoricoItem(element));
+  }
+
+  _buildHistoricoItem(Historico record) {
     return Padding(
       padding: EdgeInsets.all(10),
       child: Column(
@@ -24,19 +50,19 @@ class HistoricoValores extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _historicoValorItem(
-                header: this.record.valor1Header,
-                value: this.record.valor1,
+                header: record.valor1Header,
+                value: record.valor1,
                 subtitle2: this.subtitle2,
                 headline5: this.headline5,
               ),
               _historicoValorItem(
-                  header: this.record.operacaoHeader,
-                  value: this.record.operacao,
+                  header: record.operacaoHeader,
+                  value: record.operacao,
                   subtitle2: this.subtitle2,
                   headline5: this.headline5),
               _historicoValorItem(
-                  header: this.record.valor2Header,
-                  value: this.record.valor2,
+                  header: record.valor2Header,
+                  value: record.valor2,
                   subtitle2: this.subtitle2,
                   headline5: this.headline5),
               Text(
@@ -44,8 +70,8 @@ class HistoricoValores extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               _historicoValorItem(
-                  header: this.record.resultadoHeader,
-                  value: this.record.resultado,
+                  header: record.resultadoHeader,
+                  value: record.resultado,
                   subtitle2: this.subtitle2,
                   headline5: this.headline5),
             ],
