@@ -22,13 +22,14 @@ class _HistoryPageState extends State<HistoryPage> {
         builder:
             (BuildContext context, AsyncSnapshot<List<Historico>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // TODO: Melhorar o visual do progress indicator
-            return SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                backgroundColor: Colors.deepPurple,
+            return Center(
+              child: SizedBox(
+                height: 50,
+                width: 50,
+                child: CircularProgressIndicator(
+                  strokeWidth: 4,
+                  backgroundColor: Colors.deepPurple,
+                ),
               ),
             );
           }

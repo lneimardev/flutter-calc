@@ -66,12 +66,14 @@ class _MyHomePageState extends State<MyHomePage>
             (BuildContext context, AsyncSnapshot<List<Historico>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // TODO: Melhorar o visual do progress indicator
-            return SizedBox(
-              height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                backgroundColor: Colors.deepPurple,
+            return Center(
+              child: SizedBox(
+                height: 40,
+                width: 40,
+                child: CircularProgressIndicator(
+                  strokeWidth: 4,
+                  backgroundColor: Colors.deepPurple,
+                ),
               ),
             );
           }
@@ -88,7 +90,10 @@ class _MyHomePageState extends State<MyHomePage>
 
           return Padding(
             padding: EdgeInsets.all(10),
-            child: Text("Sem dados para serem exibidos...", textAlign: TextAlign.center,),
+            child: Text(
+              "Sem dados para serem exibidos...",
+              textAlign: TextAlign.center,
+            ),
           );
         });
   }

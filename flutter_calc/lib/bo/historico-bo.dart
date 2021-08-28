@@ -6,7 +6,8 @@ Future<List<Historico>> dadosListHistorico() async {
     // TODO: Implementar a chama da api 
     //List<Historico> list = await <chamada da api>
 
-    await Future.delayed(Duration(seconds: 10));
+    // TODO: Remover esse delay aqui, esta aqui apenas para ver o circular indicator
+    await Future.delayed(Duration(seconds: 5));
 
     List<Historico> list = [];
     Historico hist;
